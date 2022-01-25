@@ -2,6 +2,7 @@
 
 const request = require('supertest');
 const app = require('../../app');
+const { loadPlanetData } = require('../../models/planets.model');
 const {
     mongoConnect,
     mongoDisconnect,
@@ -10,6 +11,7 @@ const {
 describe('Launches API', () => {
     beforeAll(async () => {
         await mongoConnect();
+        await loadPlanetData();
     });
     afterAll(async () => {
         await mongoDisconnect();
@@ -17,7 +19,7 @@ describe('Launches API', () => {
     describe('Test GET /launches', () => {
         test('It should respond with 200 success', async () => {
             const response = await request(app)
-                .get('/launches')
+                .get('/v1/launches')
                 .expect('Content-type', /json/)
                 .expect(200);
         });
@@ -44,7 +46,7 @@ describe('Launches API', () => {
 
         test('It should respond with 201 success', async () => {
             const response = await request(app)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(completeLaunchData)
                 .expect('Content-type', /json/)
                 .expect(201);
@@ -64,7 +66,7 @@ describe('Launches API', () => {
 
         test('It should catch missing required properties', async () => {
             const response = await request(app)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(launchDataWithoutDate)
                 .expect('Content-type', /json/)
                 .expect(400);
