@@ -76,7 +76,7 @@ describe('Launches API', () => {
         });
         test('It should catch invalid dates', async () => {
             const response = await request(app)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(launchDataWithInvalidDate)
                 .expect('Content-type', /json/)
                 .expect(400);
